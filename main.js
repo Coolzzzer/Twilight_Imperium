@@ -63,7 +63,7 @@ function render(){
 							button.innerHTML = `${element.name} <br> win:${element.win} lose:${element.lose}<br>`;
 							button.appendChild(buttonPlus);
 							button.appendChild(buttonMinus);
-							button.appendChild(buttonRecovery)
+							button.appendChild(buttonRecovery);
 						}
 						actionButton()
 					});
@@ -79,20 +79,19 @@ function render(){
 				if (!exists) {
 					const a = document.createElement("button");
 					const img = document.createElement("img");
-					img.setAttribute("src", `https://raw.githubusercontent.com/Coolzzzer/Twilight_Imperium/refs/heads/main/${factionId}.png`);
+					img.setAttribute("src", allFactions[i].src);
 					img.setAttribute("width", `${width / 30}px`);
 					img.setAttribute("height", `${width / 30}px`);
 					a.setAttribute("id", factionId);
 					a.appendChild(img);
 					listAllFactions.appendChild(a);
+					
 				}
 			}
 		}
 	}
 	
-	
-	
-	class Factions {
+	class Player {
 		constructor(name){
 			this.name = name;
 			this.win = 0;
@@ -108,11 +107,17 @@ function render(){
 			return console.log(`${this.name} win:${this.win} lose:${this.lose}` )
 		}
 	}
-	class Player extends Factions{}
+	class Factions extends Player{
+		constructor(name){
+			super(name)
+			this.src = `https://raw.githubusercontent.com/Coolzzzer/Twilight_Imperium/refs/heads/main/${name}.png`;
+		}
+	}
 	function addAllObj(array, arrayName, clas) {
 		for (let i = 0; i < arrayName.length; i++) {
 			const constantName = new clas(arrayName[i]);
 			const exists = array.some(item => item.name === constantName.name);
+			
 			if (!exists) {
 				array.push(constantName);
 			}
@@ -121,12 +126,9 @@ function render(){
 	addAllObj(allPlayer,allNamePlayer, Player);
 	addAllObj(allFactions,allNameFactions, Factions);
 	renderField()
+	console.log(allFactions)
+	
+
 	}
 	
 	render()
-
-
-
-
-
-
