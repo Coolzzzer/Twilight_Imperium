@@ -15,6 +15,25 @@ function render(){
 	const temporaryStorageOperation = [];
 	const downloadedDataPlayer = [[3,2],[1,5],[8,9],[4,12],[2,8],[3,7]];
 	const downloadedDataFactions = [[3,2],[1,5],[8,9],[4,12],[2,8],[3,7],[3,2],[1,5],[8,9],[4,12],[2,8],[3,7],[3,2],[1,5],[8,9],[4,12],[2,8],[3,7],[3,2],[1,5],[8,9],[4,12],[2,8],[3,7]];
+	
+	// function ajaxData() {
+	// 	const temporaryTransformationFactions = JSON.stringify(downloadedDataFactions);
+	// 	const temporaryTransformationPlayer = JSON.stringify(downloadedDataPlayer);
+	
+	// 	const temporaryTransformationObj = {}
+	// 	temporaryTransformationObj[temporaryTransformationFactions] = temporaryTransformationPlayer;
+	
+	// 	console.log(temporaryTransformationObj)
+	
+	// 	let returnTransformationKeys = Object.keys(temporaryTransformationObj)
+	// 	let returnTransformationValue = Object.values(temporaryTransformationObj)
+	
+	// 	let returnTransformationFactions = JSON.parse(returnTransformationKeys)
+	// 	let returnTransformationPlayer = JSON.parse(returnTransformationValue)
+	// 	console.log(returnTransformationFactions)
+	// 	console.log(returnTransformationPlayer)
+	// }
+	// ajaxData()
 	const allPlayer = [];
 	const allFactions = [];
 	function renderField(){
@@ -203,4 +222,84 @@ function render(){
 	addAllObj(allFactions,allNameFactions, Factions,downloadedDataFactions);
 	renderField()	
 	}	
+	// function load(){
+	// 	const ajaxHandlerScript = "https://fe.it-academy.by/AjaxStringStorage2.php";
+	// 	let updatePassword;
+	// 	const stringName = 'Zhuk_Twilight_test1';
+	// 	storeInfo();
+	// 	function storeInfo() {
+	// 			updatePassword = Math.random();
+	// 			$.ajax({
+	// 					url: ajaxHandlerScript,
+	// 					type: 'POST',
+	// 					cache: false,
+	// 					dataType: 'json',
+	// 					data: { f: 'LOCKGET', n: stringName, p: updatePassword },
+	// 					success: lockGetReady,
+	// 					error: errorHandler
+	// 			});
+	// 	}
+	// 	function lockGetReady(callresult) {
+	// 		if (callresult.error !== undefined) {
+	// 				console.log(callresult.error);
+	// 		} else {
+
+	// 			const newEntry = {key:21};
+
+	// 			;
+	// 			console.log(newEntry)
+	// 			let savedData = [];
+	// 			if (callresult.result !== "") {
+	// 				try {
+	// 					savedData = JSON.parse(callresult.result);
+	// 					if (!Array.isArray(savedData)) {
+	// 						savedData = []; 
+	// 					}
+	// 				} catch (e) {
+	// 					savedData = []; 
+	// 				}
+	// 			}
+	// 			savedData.push(newEntry);
+	// 			$.ajax({
+	// 				url: ajaxHandlerScript,
+	// 				type: 'POST',
+	// 				cache: false,
+	// 				dataType: 'json',
+	// 				data: { f: 'UPDATE', n: stringName, v: JSON.stringify(savedData), p: updatePassword },
+	// 				success: updateReady,
+	// 				error: errorHandler
+	// 			});
+	// 		}
+	// 	}
+	// 	function updateReady(callresult) {
+	// 		if (callresult.error !== undefined) {
+	// 			console.log(callresult.error);
+	// 		} else {
+	// 			restoreInfo();
+	// 		}
+	// 	}
+	// 	function restoreInfo() {
+	// 		$.ajax({
+	// 			url: ajaxHandlerScript,
+	// 			type: 'POST',
+	// 			cache: false,
+	// 			dataType: 'json',
+	// 			data: { f: 'READ', n: stringName },
+	// 			success: readReady,
+	// 			error: errorHandler
+	// 		});
+	// 	}
+	// 	function readReady(callresult) {
+	// 		console.log("success!!")
+	// 	}
+	// 	function errorHandler(jqXHR, statusStr, errorStr) {
+	// 		console.log(statusStr + ' ' + errorStr);
+	// 	}
+	// }
+	// load()
 render()
+
+
+
+
+
