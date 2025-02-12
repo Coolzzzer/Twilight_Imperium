@@ -127,6 +127,8 @@ function render(){
 	addAllObj(allFactions,allNameFactions, Factions);
 	renderField()
 	console.log(allFactions)
+
+	console.log(allFactions)
 	
 
 	}
