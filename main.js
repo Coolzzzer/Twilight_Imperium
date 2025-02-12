@@ -13,6 +13,8 @@ function render(){
 	const allNamePlayer = ["AndreyZ", "AndreyB", "Misha", "Maksim", "Roma", "Vitalik"];
 	const temporaryStorageName = [];
 	const temporaryStorageOperation = [];
+	const downloadedDataPlayer = [[3,2],[1,5],[8,9],[4,12],[2,8],[3,7]];
+	const downloadedDataFactions = [[3,2],[1,5],[8,9],[4,12],[2,8],[3,7],[3,2],[1,5],[8,9],[4,12],[2,8],[3,7],[3,2],[1,5],[8,9],[4,12],[2,8],[3,7],[3,2],[1,5],[8,9],[4,12],[2,8],[3,7]];
 	const allPlayer = [];
 	const allFactions = [];
 	function renderField(){
@@ -71,7 +73,24 @@ function render(){
 							element.win = element.recoveryDateWin;
 							element.lose = element.recoveryDateLose;
 							rerenderButton();
-
+							function aa(){
+								temporaryStorageName.forEach((tempStorage, index) => {
+									if (element.name in tempStorage) {
+										if (temporaryStorageOperation[index] == 1) {
+											element.win--;
+										} else if (temporaryStorageOperation[index] == 0){
+											element.lose--;
+										}
+										temporaryStorageName.splice(index, 1);
+										temporaryStorageOperation.splice(index, 1);
+										console.log(temporaryStorageName);
+										console.log(index);
+										return aa()
+									}
+								});
+							}
+							aa()
+							
 						}
 						actionButton()
 					});
@@ -133,44 +152,55 @@ function render(){
 		}
 
 	}
-	
 	class Player {
-		constructor(name){
+		constructor(name, downloadedDataWin, downloadedDataLose) {
 			this.name = name;
-			this.recoveryDateWin = 0;
-			this.recoveryDateLose = 0;
+			this.recoveryDateWin = downloadedDataWin;
+			this.recoveryDateLose = downloadedDataLose;
 			this.win = this.recoveryDateWin;
 			this.lose = this.recoveryDateLose;
- 
 		}
-		addLose(){
-			this.lose += 1;
+	  
+		addLose() {
+		  this.lose += 1;
 		}
-		addWin(){
-			this.win += 1;
+	  
+		addWin() {
+		  this.win += 1;
 		}
-		getStats(){
-			return console.log(`${this.name} win:${this.win} lose:${this.lose}` )
+	  
+		getStats() {
+		  console.log(`${this.name} win: ${this.win} lose: ${this.lose}`);
 		}
-	}
-	class Factions extends Player{
-		constructor(name){
-			super(name)
-			this.src = `https://raw.githubusercontent.com/Coolzzzer/Twilight_Imperium/refs/heads/main/${name}.png`;
+	  }
+	  class Factions extends Player {
+		constructor(name, downloadedDataWin, downloadedDataLose) {
+		  super(name, downloadedDataWin, downloadedDataLose);
+		  this.src = `https://raw.githubusercontent.com/Coolzzzer/Twilight_Imperium/refs/heads/main/${name}.png`;
 		}
-	}
-	function addAllObj(array, arrayName, clas) {
+	  }
+	  
+	  function addAllObj(array, arrayName, clas, downloadedData) {
 		for (let i = 0; i < arrayName.length; i++) {
-			const constantName = new clas(arrayName[i]);
-			const exists = array.some(item => item.name === constantName.name);
-			
-			if (!exists) {
-				array.push(constantName);
+			if(!downloadedData){
+				const constantName = new clas(arrayName[i], 0, 0);
+				const exists = array.some(item => item.name === constantName.name);
+				downloadedDataPlayer.push([0,0])
+				if (!exists) {
+					array.push(constantName);
+				}
+			}else{
+				const constantName = new clas(arrayName[i], downloadedData[i][0], downloadedData[i][1]);
+				const exists = array.some(item => item.name === constantName.name);
+				
+				if (!exists) {
+					array.push(constantName);
+				}
 			}
 		}
 	}
-	addAllObj(allPlayer,allNamePlayer, Player);
-	addAllObj(allFactions,allNameFactions, Factions);
+	addAllObj(allPlayer,allNamePlayer, Player,downloadedDataPlayer);
+	addAllObj(allFactions,allNameFactions, Factions,downloadedDataFactions);
 	renderField()	
 	}	
 render()
