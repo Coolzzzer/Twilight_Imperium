@@ -11,6 +11,8 @@ function render(){
 	let height = window.innerHeight;
 	const allNameFactions = ["Arborec", "Argent", "Barony", "Saar", "Muaat", "Hacan", "Empyrean", "Sol", "Ghosts", "L1Z1X", "Mentak", "Naalu", "Nekro", "Sardakk", "NaazRokha", "Nomad", "Jol-Nar", "Cabal", "Keleres", "Winnu", "Xxcha", "Yin", "Yssaril", "Ul"];
 	const allNamePlayer = ["AndreyZ", "AndreyB", "Misha", "Maksim", "Roma", "Vitalik"];
+	const temporaryStorageName = [];
+	const temporaryStorageOperation = [];
 	const allPlayer = [];
 	const allFactions = [];
 	function renderField(){
@@ -38,6 +40,9 @@ function render(){
 		function renderPlayer() {
 			display.appendChild(listAllPlayer);
 			listAllPlayer.innerHTML = '';
+			let operation;
+			let playerName;
+			let factionName;
 			function eventButtonPlayer(elements) {
 				const exists = Array.from(listAllPlayer.children).some(button => button.innerHTML === allPlayer[i].name);
 				if (!exists) {
@@ -46,25 +51,27 @@ function render(){
 						const buttonPlus = document.createElement('button');
 						const buttonMinus = document.createElement('button');
 						const buttonRecovery = document.createElement('button');
-						const recoveryDate = [element.win,element.lose];
 						buttonPlus.textContent = "win";
 						buttonMinus.textContent = "lose";
 						buttonRecovery.textContent = "recovery";
 						rerenderButton()
-						button.addEventListener('click', () => {
-							console.log(element)
-						});
 						listAllPlayer.appendChild(button);
 						function actionButton(){
-							buttonPlus.addEventListener("click", ()=>{element.addWin();rerenderButton();showSelectionFactions();})
-							buttonMinus.addEventListener("click", ()=>{element.addLose();rerenderButton();showSelectionFactions()})
-							buttonRecovery.addEventListener("click", ()=>{element.win = recoveryDate[0];element.lose = recoveryDate[1];rerenderButton()});
+							buttonPlus.addEventListener("click", ()=>{element.addWin();rerenderButton();showSelectionFactions(1,element.name);})
+							buttonMinus.addEventListener("click", ()=>{element.addLose();rerenderButton();showSelectionFactions(0,element.name)})
+							buttonRecovery.addEventListener("click", actionRecovery);
 						}
 						function rerenderButton(){
 							button.innerHTML = `${element.name} <br><br> Total <br> win:${element.win} lose:${element.lose}<br><br>`;
 							button.appendChild(buttonPlus);
 							button.appendChild(buttonMinus);
 							button.appendChild(buttonRecovery);
+						}
+						function actionRecovery(){
+							element.win = element.recoveryDateWin;
+							element.lose = element.recoveryDateLose;
+							rerenderButton();
+
 						}
 						actionButton()
 					});
@@ -93,23 +100,48 @@ function render(){
 		function selectionFactions(){
 			allFactions.forEach(allFactions=>{
 				const button = document.createElement("button");
+				const img = document.createElement('img');
+				const br = document.createElement("br")
+				img.setAttribute("src",allFactions.src);
+				img.setAttribute("width",width/30+"px");
+				img.setAttribute("height",width/30+"px")
 				button.textContent = allFactions.name;
 				selectionFactionsDiv.appendChild(button);
+				button.appendChild(br);
+				button.appendChild(img);
+				button.addEventListener("click", hidenSelectionFactions);
+				function hidenSelectionFactions(){
+					display.removeChild(selectionFactionsDiv);
+					if(operation==1){
+						allFactions.addWin()
+					}else if(operation==0){
+						allFactions.addLose()
+					}
+					factionName = allFactions.name;
+					temporaryStorageName.push({ [playerName]: factionName });
+					temporaryStorageOperation.push(operation);
+					console.log(temporaryStorageName);
+					console.log(temporaryStorageOperation)
+				}
 			})
 		}
-		function showSelectionFactions(){
+		function showSelectionFactions(op,elem){
 			display.appendChild(selectionFactionsDiv);
+			operation = op;
+			playerName = elem;
+			return 
 		}
-		function hidenSelectionFactions(){
-			display.removeChild(selectionFactionsDiv);
-		}
+
 	}
 	
 	class Player {
 		constructor(name){
 			this.name = name;
-			this.win = 0;
-			this.lose = 0;
+			this.recoveryDateWin = 0;
+			this.recoveryDateLose = 0;
+			this.win = this.recoveryDateWin;
+			this.lose = this.recoveryDateLose;
+ 
 		}
 		addLose(){
 			this.lose += 1;
@@ -140,6 +172,5 @@ function render(){
 	addAllObj(allPlayer,allNamePlayer, Player);
 	addAllObj(allFactions,allNameFactions, Factions);
 	renderField()	
-	}
-	
-	render()
+	}	
+render()
