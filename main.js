@@ -6,6 +6,7 @@ function render(){
 	const inputAddPlayer = document.createElement("input");
 	const listAllFactions = document.createElement("div");
 	const listAllPlayer = document.createElement("div");
+	const selectionFactionsDiv = document.createElement("div");
 	let width = window.innerWidth;
 	let height = window.innerHeight;
 	const allNameFactions = ["Arborec", "Argent", "Barony", "Saar", "Muaat", "Hacan", "Empyrean", "Sol", "Ghosts", "L1Z1X", "Mentak", "Naalu", "Nekro", "Sardakk", "NaazRokha", "Nomad", "Jol-Nar", "Cabal", "Keleres", "Winnu", "Xxcha", "Yin", "Yssaril", "Ul"];
@@ -22,6 +23,7 @@ function render(){
 		display.appendChild(buttonAddPlayer);
 		display.appendChild(buttonCheckPlayer);
 		display.appendChild(buttonCheckFactions);
+		selectionFactions()
 		function addPlayer(){
 			display.appendChild(inputAddPlayer);
 			if(inputAddPlayer.value){
@@ -45,8 +47,8 @@ function render(){
 						const buttonMinus = document.createElement('button');
 						const buttonRecovery = document.createElement('button');
 						const recoveryDate = [element.win,element.lose];
-						buttonPlus.textContent = "+";
-						buttonMinus.textContent = "-";
+						buttonPlus.textContent = "win";
+						buttonMinus.textContent = "lose";
 						buttonRecovery.textContent = "recovery";
 						rerenderButton()
 						button.addEventListener('click', () => {
@@ -54,13 +56,12 @@ function render(){
 						});
 						listAllPlayer.appendChild(button);
 						function actionButton(){
-							buttonPlus.addEventListener("click", ()=>{element.addWin();rerenderButton()})
-							buttonMinus.addEventListener("click", ()=>{element.addLose();rerenderButton()})
+							buttonPlus.addEventListener("click", ()=>{element.addWin();rerenderButton();showSelectionFactions();})
+							buttonMinus.addEventListener("click", ()=>{element.addLose();rerenderButton();showSelectionFactions()})
 							buttonRecovery.addEventListener("click", ()=>{element.win = recoveryDate[0];element.lose = recoveryDate[1];rerenderButton()});
-							console.log(element);
 						}
 						function rerenderButton(){
-							button.innerHTML = `${element.name} <br> win:${element.win} lose:${element.lose}<br>`;
+							button.innerHTML = `${element.name} <br><br> Total <br> win:${element.win} lose:${element.lose}<br><br>`;
 							button.appendChild(buttonPlus);
 							button.appendChild(buttonMinus);
 							button.appendChild(buttonRecovery);
@@ -88,6 +89,19 @@ function render(){
 					
 				}
 			}
+		}
+		function selectionFactions(){
+			allFactions.forEach(allFactions=>{
+				const button = document.createElement("button");
+				button.textContent = allFactions.name;
+				selectionFactionsDiv.appendChild(button);
+			})
+		}
+		function showSelectionFactions(){
+			display.appendChild(selectionFactionsDiv);
+		}
+		function hidenSelectionFactions(){
+			display.removeChild(selectionFactionsDiv);
 		}
 	}
 	
@@ -125,12 +139,7 @@ function render(){
 	}
 	addAllObj(allPlayer,allNamePlayer, Player);
 	addAllObj(allFactions,allNameFactions, Factions);
-	renderField()
-	console.log(allFactions)
-
-	console.log(allFactions)
-	
-
+	renderField()	
 	}
 	
 	render()
