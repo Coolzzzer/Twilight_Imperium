@@ -1,3 +1,7 @@
+const downloadedDataPlayer = [[3,2],[1,5],[8,9],[4,12],[2,8],[3,7]];
+const downloadedDataFactions = [[3,2],[1,5],[8,9],[4,12],[2,8],[3,7],[3,2],[1,5],[8,9],[4,12],[2,8],[3,7],[3,2],[1,5],[8,9],[4,12],[2,8],[3,7],[3,2],[1,5],[8,9],[4,12],[2,8],[3,7]];
+const allPlayer = [];
+const allFactions = [];
 function render(){
 	const display = document.querySelector("#display");
 	const buttonAddPlayer = document.createElement("button");
@@ -13,29 +17,6 @@ function render(){
 	const allNamePlayer = ["AndreyZ", "AndreyB", "Misha", "Maksim", "Roma", "Vitalik"];
 	const temporaryStorageName = [];
 	const temporaryStorageOperation = [];
-	const downloadedDataPlayer = [[3,2],[1,5],[8,9],[4,12],[2,8],[3,7]];
-	const downloadedDataFactions = [[3,2],[1,5],[8,9],[4,12],[2,8],[3,7],[3,2],[1,5],[8,9],[4,12],[2,8],[3,7],[3,2],[1,5],[8,9],[4,12],[2,8],[3,7],[3,2],[1,5],[8,9],[4,12],[2,8],[3,7]];
-	
-	// function ajaxData() {
-	// 	const temporaryTransformationFactions = JSON.stringify(downloadedDataFactions);
-	// 	const temporaryTransformationPlayer = JSON.stringify(downloadedDataPlayer);
-	
-	// 	const temporaryTransformationObj = {}
-	// 	temporaryTransformationObj[temporaryTransformationFactions] = temporaryTransformationPlayer;
-	
-	// 	console.log(temporaryTransformationObj)
-	
-	// 	let returnTransformationKeys = Object.keys(temporaryTransformationObj)
-	// 	let returnTransformationValue = Object.values(temporaryTransformationObj)
-	
-	// 	let returnTransformationFactions = JSON.parse(returnTransformationKeys)
-	// 	let returnTransformationPlayer = JSON.parse(returnTransformationValue)
-	// 	console.log(returnTransformationFactions)
-	// 	console.log(returnTransformationPlayer)
-	// }
-	// ajaxData()
-	const allPlayer = [];
-	const allFactions = [];
 	function renderField(){
 		buttonAddPlayer.innerHTML = "Add player";
 		buttonCheckPlayer.innerHTML = "Check player";
@@ -92,7 +73,7 @@ function render(){
 							element.win = element.recoveryDateWin;
 							element.lose = element.recoveryDateLose;
 							rerenderButton();
-							function aa(){
+							function addResult(){
 								temporaryStorageName.forEach((tempStorage, index) => {
 									if (element.name in tempStorage) {
 										if (temporaryStorageOperation[index] == 1) {
@@ -104,11 +85,11 @@ function render(){
 										temporaryStorageOperation.splice(index, 1);
 										console.log(temporaryStorageName);
 										console.log(index);
-										return aa()
+										return addResult()
 									}
 								});
 							}
-							aa()
+							addResult()
 							
 						}
 						actionButton()
@@ -131,7 +112,6 @@ function render(){
 					a.setAttribute("id", factionId);
 					a.appendChild(img);
 					listAllFactions.appendChild(a);
-					
 				}
 			}
 		}
@@ -222,84 +202,126 @@ function render(){
 	addAllObj(allFactions,allNameFactions, Factions,downloadedDataFactions);
 	renderField()	
 	}	
-	// function load(){
-	// 	const ajaxHandlerScript = "https://fe.it-academy.by/AjaxStringStorage2.php";
-	// 	let updatePassword;
-	// 	const stringName = 'Zhuk_Twilight_test1';
-	// 	storeInfo();
-	// 	function storeInfo() {
-	// 			updatePassword = Math.random();
-	// 			$.ajax({
-	// 					url: ajaxHandlerScript,
-	// 					type: 'POST',
-	// 					cache: false,
-	// 					dataType: 'json',
-	// 					data: { f: 'LOCKGET', n: stringName, p: updatePassword },
-	// 					success: lockGetReady,
-	// 					error: errorHandler
-	// 			});
-	// 	}
-	// 	function lockGetReady(callresult) {
-	// 		if (callresult.error !== undefined) {
-	// 				console.log(callresult.error);
-	// 		} else {
+	function ajax(){
+		const urlLoad = 'https://fe.it-academy.by/AjaxStringStorage2.php';
+		const urlModify = 'https://fe.it-academy.by/AjaxStringStorage2.php';
+		const stringName = 'Zhuk_Twilight_test00567';
+		let arrayData = [];
+		
+		$(document).ready(function() {
+				console.log("jQuery загружен и готов."); // Отладочное сообщение
+				$('#loadButton').on('click', function() {
+						loadArray();
+				});
+		
+				$('#modifyButton').on('click', function() {
+						modifyArray();
+				});
+		});
+		
+		function loadArray() {
+				$.ajax({
+						url: urlLoad,
+						type: 'POST',
+						data: {
+								f: 'READ',
+								n: stringName
+						},
+						success: function(response) {
+								console.log('Ответ сервера:', response);
+								try {
+										if (response.result) {
+												arrayData = JSON.parse(response.result);
+												displayData(arrayData);
+												console.log('Массив загружен:', arrayData);
+										} else {
+												console.error('Ответ не содержит данных.');
+										}
+								} catch (e) {
+										console.error('Ошибка при разборе JSON:', e);
+								}
+						},
+						error: function(xhr, status, error) {
+								console.error('Ошибка при загрузке массива:', error);
+						}
+				});
+		}
+		
+		function modifyArray() {
+				if (arrayData.length >= 0) {
+					if(arrayData.length==0){
+						arrayData.push(downloadedDataFactions,downloadedDataPlayer)
+					}else{
 
-	// 			const newEntry = {key:21};
 
-	// 			;
-	// 			console.log(newEntry)
-	// 			let savedData = [];
-	// 			if (callresult.result !== "") {
-	// 				try {
-	// 					savedData = JSON.parse(callresult.result);
-	// 					if (!Array.isArray(savedData)) {
-	// 						savedData = []; 
-	// 					}
-	// 				} catch (e) {
-	// 					savedData = []; 
-	// 				}
-	// 			}
-	// 			savedData.push(newEntry);
-	// 			$.ajax({
-	// 				url: ajaxHandlerScript,
-	// 				type: 'POST',
-	// 				cache: false,
-	// 				dataType: 'json',
-	// 				data: { f: 'UPDATE', n: stringName, v: JSON.stringify(savedData), p: updatePassword },
-	// 				success: updateReady,
-	// 				error: errorHandler
-	// 			});
-	// 		}
-	// 	}
-	// 	function updateReady(callresult) {
-	// 		if (callresult.error !== undefined) {
-	// 			console.log(callresult.error);
-	// 		} else {
-	// 			restoreInfo();
-	// 		}
-	// 	}
-	// 	function restoreInfo() {
-	// 		$.ajax({
-	// 			url: ajaxHandlerScript,
-	// 			type: 'POST',
-	// 			cache: false,
-	// 			dataType: 'json',
-	// 			data: { f: 'READ', n: stringName },
-	// 			success: readReady,
-	// 			error: errorHandler
-	// 		});
-	// 	}
-	// 	function readReady(callresult) {
-	// 		console.log("success!!")
-	// 	}
-	// 	function errorHandler(jqXHR, statusStr, errorStr) {
-	// 		console.log(statusStr + ' ' + errorStr);
-	// 	}
-	// }
-	// load()
+
+
+					//////////////
+						function cr(all){
+							let h = [];
+							for(let i;i>=all.length;i++){
+								h.push(all.win, all.lose)
+								console.log(h)
+							}
+							return h
+						}
+						arrayData = [cr(allFactions),cr(allPlayer)]; 
+						console.log(12)
+						////////////
+
+
+
+
+
+
+
+					}
+						$.ajax({
+								url: urlModify,
+								type: 'POST',
+								data: {
+										f: 'LOCKGET',
+										n: stringName,
+										p: 'PASSWORD'
+								},
+								success: function() {
+										$.ajax({
+												url: urlModify,
+												type: 'POST',
+												data: {
+														f: 'UPDATE',
+														n: stringName,
+														v: JSON.stringify(arrayData),
+														p: 'PASSWORD'
+												},
+												success: function(response) {
+														displayData(arrayData);
+														console.log('Массив изменен и сохранен:', arrayData);
+												},
+												error: function(xhr, status, error) {
+														console.error('Ошибка при сохранении измененного массива:', error);
+												}
+										});
+								},
+								error: function(xhr, status, error) {
+										console.error('Ошибка при блокировке данных:', error);
+								}
+						});
+				} else {
+						console.error('Массив пуст. Сначала загрузите массив.');
+				}
+		}
+		
+		function displayData(data) {
+				const dataContainer = $('#dataContainer');
+				dataContainer.empty(); // Очистка контейнера перед загрузкой новых данных
+		
+				const div = $('<div></div>').text(JSON.stringify(data));
+				dataContainer.append(div);
+		}
+		
+		}
+	ajax()
 render()
-
-
-
 
 
