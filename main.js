@@ -1,4 +1,4 @@
-let arrayData = []
+let arrayData = [];
 const allPlayer = [];
 const allFactions = [];
 function render(){
@@ -41,9 +41,7 @@ function render(){
 		function renderPlayer() {
 			display.appendChild(listAllPlayer);
 			listAllPlayer.innerHTML = '';
-			let operation;
-			let playerName;
-			let factionName;
+
 			function eventButtonPlayer(elements) {
 				const exists = Array.from(listAllPlayer.children).some(button => button.innerHTML === allPlayer[i].name);
 				if (!exists) {
@@ -69,27 +67,35 @@ function render(){
 							button.appendChild(buttonRecovery);
 						}
 						function actionRecovery(){
-							element.win = element.recoveryDateWin;
-							element.lose = element.recoveryDateLose;
-							rerenderButton();
-							function addResult(){
-								temporaryStorageName.forEach((tempStorage, index) => {
-									if (element.name in tempStorage) {
-										if (temporaryStorageOperation[index] == 1) {
-											element.win--;
-										} else if (temporaryStorageOperation[index] == 0){
-											element.lose--;
-										}
-										temporaryStorageName.splice(index, 1);
-										temporaryStorageOperation.splice(index, 1);
-										console.log(temporaryStorageName);
-										console.log(index);
-										return addResult()
-									}
-								});
+							if(element.win != element.recoveryDateWin){
+								element.win--
+							} else if(element.lose != element.recoveryDateLose){
+								element.lose--
+							}else{
+								console.log(allFactions);
+								console.log(allPlayer)
+								return rerenderButton()
 							}
-							addResult()
-							
+							temporaryStorageName.forEach((el,index) => {
+								allFactions.forEach(e=>{
+									if(e.name == el[element.name]){
+										if(temporaryStorageOperation[index]==1){
+											e.win--
+										}else if(temporaryStorageOperation[index]==0){
+											e.lose--
+										}
+										temporaryStorageOperation.splice(index,1);
+										temporaryStorageName.splice(index,1)
+										index--
+										console.log(element);
+										console.log(e);
+										console.log(index);
+										console.log(temporaryStorageOperation)
+										console.log(temporaryStorageName)
+									}
+								})
+							})	
+							return actionRecovery()			
 						}
 						actionButton()
 					});
@@ -118,10 +124,10 @@ function render(){
 			allFactions.forEach(allFactions=>{
 				const button = document.createElement("button");
 				const img = document.createElement('img');
-				const br = document.createElement("br")
+				const br = document.createElement("br");
 				img.setAttribute("src",allFactions.src);
 				img.setAttribute("width",width/30+"px");
-				img.setAttribute("height",width/30+"px")
+				img.setAttribute("height",width/30+"px");
 				button.textContent = allFactions.name;
 				selectionFactionsDiv.appendChild(button);
 				button.appendChild(br);
@@ -137,8 +143,6 @@ function render(){
 					factionName = allFactions.name;
 					temporaryStorageName.push({ [playerName]: factionName });
 					temporaryStorageOperation.push(operation);
-					console.log(temporaryStorageName);
-					console.log(temporaryStorageOperation)
 				}
 			})
 		}
@@ -183,8 +187,7 @@ function render(){
 			if(!downloadedData){
 				const constantName = new clas(arrayName[i], 0, 0);
 				const exists = array.some(item => item.name === constantName.name);
-
-				// arrayData[0].push([0,0])
+				arrayData[0].push([0,0])
 				if (!exists) {
 					array.push(constantName);
 				}
@@ -201,14 +204,14 @@ function render(){
 	setTimeout(() => {
 		addAllObj(allPlayer,allNamePlayer, Player,arrayData[0]);
 		addAllObj(allFactions,allNameFactions, Factions,arrayData[1]);
-		renderField()	;
+		renderField();
 	}, 2);
 
 	}	
 function ajax(){
 	const urlLoad = 'https://fe.it-academy.by/AjaxStringStorage2.php';
 	const urlModify = 'https://fe.it-academy.by/AjaxStringStorage2.php';
-	const stringName = 'Zhuk_Twilight_test00568';
+	const stringName = 'Zhuk_Twilight_test005724';
 	
 	$(document).ready(function() {
 			$('#modifyButton').on('click', function() {
@@ -232,7 +235,8 @@ function ajax(){
 											arrayData = JSON.parse(response.result);
 											console.log("Результат:", arrayData);
 									} else {
-											console.error('Ответ не содержит данных.');
+											arrayData = [[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]]
+											console.error('Ответ не содержит данных.');										
 									}
 							} catch (e) {
 									console.error('Ошибка при разборе JSON:', e);
@@ -291,11 +295,13 @@ function ajax(){
 	loadArray();
 	}
 
-	ajax()
+ajax()
 setTimeout(() => {
+	if(arrayData[0].length == 0){
+		arrayData = [[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]]
+	}
 	render()
-}, 1000);
-
+}, 100);
 
 
 
