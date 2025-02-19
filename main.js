@@ -1,11 +1,13 @@
 let arrayData = [];
 const allPlayer = [];
 const allFactions = [];
+const buttonModify = document.createElement("button");
 function render(){
 	const display = document.querySelector("#display");
 	// const buttonAddPlayer = document.createElement("button");
 	const buttonCheckPlayer = document.createElement("button");
 	const buttonCheckFactions = document.createElement("button");
+	const buttonUpdateStatisticsFaction = document.createElement("button");
 	// const inputAddPlayer = document.createElement("input");
 	const listAllFactions = document.createElement("div");
 	const listAllPlayer = document.createElement("div");
@@ -20,12 +22,15 @@ function render(){
 		// buttonAddPlayer.innerHTML = "Add player";
 		buttonCheckPlayer.innerHTML = "Check player";
 		buttonCheckFactions.innerHTML = "Check factions";
+		buttonModify.innerHTML = "Load data";
+		buttonUpdateStatisticsFaction.innerHTML = "Update statistics"
 		// buttonAddPlayer.addEventListener("click", addPlayer);
 		buttonCheckPlayer.addEventListener("click", renderPlayer);
 		buttonCheckFactions.addEventListener("click", renderListFactions);
 		// display.appendChild(buttonAddPlayer);
 		display.appendChild(buttonCheckPlayer);
 		display.appendChild(buttonCheckFactions);
+		display.appendChild(buttonModify);
 		selectionFactions()
 		// function addPlayer(){
 		// 	display.appendChild(inputAddPlayer);
@@ -40,8 +45,11 @@ function render(){
 		// }
 		function renderPlayer() {
 			display.appendChild(listAllPlayer);
+			if (display.contains(listAllFactions)){
+				display.removeChild(listAllFactions);
+				display.removeChild(buttonUpdateStatisticsFaction)
+			}
 			listAllPlayer.innerHTML = '';
-
 			function eventButtonPlayer(elements) {
 				const exists = Array.from(listAllPlayer.children).some(button => button.innerHTML === allPlayer[i].name);
 				if (!exists) {
@@ -56,8 +64,8 @@ function render(){
 						rerenderButton()
 						listAllPlayer.appendChild(button);
 						function actionButton(){
-							buttonPlus.addEventListener("click", ()=>{element.addWin();rerenderButton();showSelectionFactions(1,element.name);})
-							buttonMinus.addEventListener("click", ()=>{element.addLose();rerenderButton();showSelectionFactions(0,element.name)})
+							buttonPlus.addEventListener("click", ()=>{element.addWin();rerenderButton();showSelectionFactions(1,element.name);display.removeChild(listAllPlayer);})
+							buttonMinus.addEventListener("click", ()=>{element.addLose();rerenderButton();showSelectionFactions(0,element.name);display.removeChild(listAllPlayer);})
 							buttonRecovery.addEventListener("click", actionRecovery);
 						}
 						function rerenderButton(){
@@ -72,8 +80,6 @@ function render(){
 							} else if(element.lose != element.recoveryDateLose){
 								element.lose--
 							}else{
-								console.log(allFactions);
-								console.log(allPlayer)
 								return rerenderButton()
 							}
 							temporaryStorageName.forEach((el,index) => {
@@ -87,11 +93,6 @@ function render(){
 										temporaryStorageOperation.splice(index,1);
 										temporaryStorageName.splice(index,1)
 										index--
-										console.log(element);
-										console.log(e);
-										console.log(index);
-										console.log(temporaryStorageOperation)
-										console.log(temporaryStorageName)
 									}
 								})
 							})	
@@ -104,21 +105,31 @@ function render(){
 			eventButtonPlayer(allPlayer)
 		}
 		function renderListFactions() {
+			if(display.contains(listAllPlayer)){
+				display.removeChild(listAllPlayer)
+			}
 			display.appendChild(listAllFactions);
-			for (let i = 0; i < allNameFactions.length; i++) {
-				const factionId = allNameFactions[i];
+			allNameFactions.forEach((factionId, index) => {
+				const statisticsFaction = document.createElement("div");
 				const exists = Array.from(listAllFactions.children).some(button => button.id === factionId);
+				buttonUpdateStatisticsFaction.addEventListener("click", updateStatisticsFaction)
+				function updateStatisticsFaction(){
+					statisticsFaction.innerHTML = `win:${allFactions[index].win} lose:${allFactions[index].lose}`;
+				}
 				if (!exists) {
 					const a = document.createElement("button");
 					const img = document.createElement("img");
-					img.setAttribute("src", allFactions[i].src);
+					img.setAttribute("src", allFactions[index].src);
 					img.setAttribute("width", `${width / 30}px`);
 					img.setAttribute("height", `${width / 30}px`);
 					a.setAttribute("id", factionId);
 					a.appendChild(img);
 					listAllFactions.appendChild(a);
+					a.appendChild(statisticsFaction);
+					updateStatisticsFaction();
 				}
-			}
+			});
+			display.appendChild(buttonUpdateStatisticsFaction);
 		}
 		function selectionFactions(){
 			allFactions.forEach(allFactions=>{
@@ -134,6 +145,7 @@ function render(){
 				button.appendChild(img);
 				button.addEventListener("click", hidenSelectionFactions);
 				function hidenSelectionFactions(){
+					display.appendChild(listAllPlayer);
 					display.removeChild(selectionFactionsDiv);
 					if(operation==1){
 						allFactions.addWin()
@@ -211,13 +223,8 @@ function render(){
 function ajax(){
 	const urlLoad = 'https://fe.it-academy.by/AjaxStringStorage2.php';
 	const urlModify = 'https://fe.it-academy.by/AjaxStringStorage2.php';
-	const stringName = 'Zhuk_Twilight_test005724';
-	
-	$(document).ready(function() {
-			$('#modifyButton').on('click', function() {
-					modifyArray();
-			});
-	});
+	const stringName = 'Zhuk_Twilight_test0058';
+	buttonModify.addEventListener("click", modifyArray)
 	
 
 	function loadArray() {
@@ -294,7 +301,6 @@ function ajax(){
 	
 	loadArray();
 	}
-
 ajax()
 setTimeout(() => {
 	if(arrayData[0].length == 0){
@@ -302,7 +308,3 @@ setTimeout(() => {
 	}
 	render()
 }, 100);
-
-
-
-
