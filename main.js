@@ -1,13 +1,12 @@
-const downloadedDataPlayer = [[3,2],[1,5],[8,9],[4,12],[2,8],[3,7]];
-const downloadedDataFactions = [[3,2],[1,5],[8,9],[4,12],[2,8],[3,7],[3,2],[1,5],[8,9],[4,12],[2,8],[3,7],[3,2],[1,5],[8,9],[4,12],[2,8],[3,7],[3,2],[1,5],[8,9],[4,12],[2,8],[3,7]];
+let arrayData = []
 const allPlayer = [];
 const allFactions = [];
 function render(){
 	const display = document.querySelector("#display");
-	const buttonAddPlayer = document.createElement("button");
+	// const buttonAddPlayer = document.createElement("button");
 	const buttonCheckPlayer = document.createElement("button");
 	const buttonCheckFactions = document.createElement("button");
-	const inputAddPlayer = document.createElement("input");
+	// const inputAddPlayer = document.createElement("input");
 	const listAllFactions = document.createElement("div");
 	const listAllPlayer = document.createElement("div");
 	const selectionFactionsDiv = document.createElement("div");
@@ -18,27 +17,27 @@ function render(){
 	const temporaryStorageName = [];
 	const temporaryStorageOperation = [];
 	function renderField(){
-		buttonAddPlayer.innerHTML = "Add player";
+		// buttonAddPlayer.innerHTML = "Add player";
 		buttonCheckPlayer.innerHTML = "Check player";
 		buttonCheckFactions.innerHTML = "Check factions";
-		buttonAddPlayer.addEventListener("click", addPlayer);
+		// buttonAddPlayer.addEventListener("click", addPlayer);
 		buttonCheckPlayer.addEventListener("click", renderPlayer);
 		buttonCheckFactions.addEventListener("click", renderListFactions);
-		display.appendChild(buttonAddPlayer);
+		// display.appendChild(buttonAddPlayer);
 		display.appendChild(buttonCheckPlayer);
 		display.appendChild(buttonCheckFactions);
 		selectionFactions()
-		function addPlayer(){
-			display.appendChild(inputAddPlayer);
-			if(inputAddPlayer.value){
-				if(allNamePlayer.includes(inputAddPlayer.value)){
-					return 
-				}
-				allNamePlayer.push(inputAddPlayer.value);
-				addAllObj(allPlayer,allNamePlayer, Player);
-				return console.log(allPlayer)
-			}
-		}
+		// function addPlayer(){
+		// 	display.appendChild(inputAddPlayer);
+		// 	if(inputAddPlayer.value){
+		// 		if(allNamePlayer.includes(inputAddPlayer.value)){
+		// 			return 
+		// 		}
+		// 		allNamePlayer.push(inputAddPlayer.value);
+		// 		addAllObj(allPlayer,allNamePlayer, Player);
+		// 		return console.log(allPlayer)
+		// 	}
+		// }
 		function renderPlayer() {
 			display.appendChild(listAllPlayer);
 			listAllPlayer.innerHTML = '';
@@ -184,7 +183,8 @@ function render(){
 			if(!downloadedData){
 				const constantName = new clas(arrayName[i], 0, 0);
 				const exists = array.some(item => item.name === constantName.name);
-				downloadedDataPlayer.push([0,0])
+
+				// arrayData[0].push([0,0])
 				if (!exists) {
 					array.push(constantName);
 				}
@@ -198,130 +198,105 @@ function render(){
 			}
 		}
 	}
-	addAllObj(allPlayer,allNamePlayer, Player,downloadedDataPlayer);
-	addAllObj(allFactions,allNameFactions, Factions,downloadedDataFactions);
-	renderField()	
+	setTimeout(() => {
+		addAllObj(allPlayer,allNamePlayer, Player,arrayData[0]);
+		addAllObj(allFactions,allNameFactions, Factions,arrayData[1]);
+		renderField()	;
+	}, 2);
+
 	}	
-	function ajax(){
-		const urlLoad = 'https://fe.it-academy.by/AjaxStringStorage2.php';
-		const urlModify = 'https://fe.it-academy.by/AjaxStringStorage2.php';
-		const stringName = 'Zhuk_Twilight_test00567';
-		let arrayData = [];
-		
-		$(document).ready(function() {
-				console.log("jQuery загружен и готов."); // Отладочное сообщение
-				$('#loadButton').on('click', function() {
-						loadArray();
-				});
-		
-				$('#modifyButton').on('click', function() {
-						modifyArray();
-				});
-		});
-		
-		function loadArray() {
-				$.ajax({
-						url: urlLoad,
-						type: 'POST',
-						data: {
-								f: 'READ',
-								n: stringName
-						},
-						success: function(response) {
-								console.log('Ответ сервера:', response);
-								try {
-										if (response.result) {
-												arrayData = JSON.parse(response.result);
-												displayData(arrayData);
-												console.log('Массив загружен:', arrayData);
-										} else {
-												console.error('Ответ не содержит данных.');
-										}
-								} catch (e) {
-										console.error('Ошибка при разборе JSON:', e);
-								}
-						},
-						error: function(xhr, status, error) {
-								console.error('Ошибка при загрузке массива:', error);
-						}
-				});
-		}
-		
-		function modifyArray() {
-				if (arrayData.length >= 0) {
-					if(arrayData.length==0){
-						arrayData.push(downloadedDataFactions,downloadedDataPlayer)
-					}else{
+function ajax(){
+	const urlLoad = 'https://fe.it-academy.by/AjaxStringStorage2.php';
+	const urlModify = 'https://fe.it-academy.by/AjaxStringStorage2.php';
+	const stringName = 'Zhuk_Twilight_test00568';
+	
+	$(document).ready(function() {
+			$('#modifyButton').on('click', function() {
+					modifyArray();
+			});
+	});
+	
 
-
-
-
-					//////////////
-						function cr(all){
-							let h = [];
-							for(let i;i>=all.length;i++){
-								h.push(all.win, all.lose)
-								console.log(h)
+	function loadArray() {
+			$.ajax({
+					url: urlLoad,
+					type: 'POST',
+					data: {
+							f: 'READ',
+							n: stringName
+					},
+					success: function(response) {
+							console.log('Ответ сервера:', response);
+							try {
+									if (response.result) {
+											arrayData = JSON.parse(response.result);
+											console.log("Результат:", arrayData);
+									} else {
+											console.error('Ответ не содержит данных.');
+									}
+							} catch (e) {
+									console.error('Ошибка при разборе JSON:', e);
 							}
-							return h
-						}
-						arrayData = [cr(allFactions),cr(allPlayer)]; 
-						console.log(12)
-						////////////
-
-
-
-
-
-
-
+					},
+					error: function(xhr, status, error) {
+							console.error('Ошибка при загрузке массива:', error);
 					}
+			});
+	}
+	function modifyArray() {
+			if (arrayData.length >= 0) {
+				function createNewArrayData(all) {
+					let h = [];
+					all.forEach((item, index) => {
+							h.push([item.win,item.lose]);
+					});
+					return h;
+				}	
+				arrayData = [createNewArrayData(allPlayer),createNewArrayData(allFactions)]; 
+				$.ajax({
+					url: urlModify,
+					type: 'POST',
+					data: {
+						f: 'LOCKGET',
+						n: stringName,
+						p: 'PASSWORD'
+					},
+					success: function() {
 						$.ajax({
-								url: urlModify,
-								type: 'POST',
-								data: {
-										f: 'LOCKGET',
-										n: stringName,
-										p: 'PASSWORD'
-								},
-								success: function() {
-										$.ajax({
-												url: urlModify,
-												type: 'POST',
-												data: {
-														f: 'UPDATE',
-														n: stringName,
-														v: JSON.stringify(arrayData),
-														p: 'PASSWORD'
-												},
-												success: function(response) {
-														displayData(arrayData);
-														console.log('Массив изменен и сохранен:', arrayData);
-												},
-												error: function(xhr, status, error) {
-														console.error('Ошибка при сохранении измененного массива:', error);
-												}
-										});
-								},
-								error: function(xhr, status, error) {
-										console.error('Ошибка при блокировке данных:', error);
-								}
+							url: urlModify,
+							type: 'POST',
+							data: {
+								f: 'UPDATE',
+								n: stringName,
+								v: JSON.stringify(arrayData),
+								p: 'PASSWORD'
+							},
+							success: function(response) {
+								console.log('Массив изменен и сохранен:', arrayData);
+							},
+							error: function(xhr, status, error) {
+								console.error('Ошибка при сохранении измененного массива:', error);
+							}
 						});
-				} else {
-						console.error('Массив пуст. Сначала загрузите массив.');
-				}
-		}
-		
-		function displayData(data) {
-				const dataContainer = $('#dataContainer');
-				dataContainer.empty(); // Очистка контейнера перед загрузкой новых данных
-		
-				const div = $('<div></div>').text(JSON.stringify(data));
-				dataContainer.append(div);
-		}
-		
-		}
+					},
+					error: function(xhr, status, error) {
+						console.error('Ошибка при блокировке данных:', error);
+					}
+				});
+			} else {
+					console.error('Массив пуст. Сначала загрузите массив.');
+			}
+	}
+	
+	loadArray();
+	}
+
 	ajax()
-render()
+setTimeout(() => {
+	render()
+}, 1000);
+
+
+
 
 
