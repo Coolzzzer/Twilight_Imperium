@@ -8,10 +8,13 @@ function render(){
 	const buttonCheckPlayer = document.createElement("button");
 	const buttonCheckFactions = document.createElement("button");
 	const buttonUpdateStatisticsFaction = document.createElement("button");
+	const buttonCreateTirList = document.createElement("button");
 	// const inputAddPlayer = document.createElement("input");
 	const listAllFactions = document.createElement("div");
 	const listAllPlayer = document.createElement("div");
 	const selectionFactionsDiv = document.createElement("div");
+	const divFaction = document.createElement("div");
+	const divTirList = document.createElement("div");
 	let width = window.innerWidth;
 	let height = window.innerHeight;
 	const allNameFactions = ["Arborec", "Argent", "Barony", "Saar", "Muaat", "Hacan", "Empyrean", "Sol", "Ghosts", "L1Z1X", "Mentak", "Naalu", "Nekro", "Sardakk", "NaazRokha", "Nomad", "Jol-Nar", "Cabal", "Keleres", "Winnu", "Xxcha", "Yin", "Yssaril", "Ul"];
@@ -23,7 +26,8 @@ function render(){
 		buttonCheckPlayer.innerHTML = "Check player";
 		buttonCheckFactions.innerHTML = "Check factions";
 		buttonModify.innerHTML = "Load data";
-		buttonUpdateStatisticsFaction.innerHTML = "Update statistics"
+		buttonCreateTirList.innerHTML = "Tir list"
+		buttonUpdateStatisticsFaction.innerHTML = "Update statistics";
 		// buttonAddPlayer.addEventListener("click", addPlayer);
 		buttonCheckPlayer.addEventListener("click", renderPlayer);
 		buttonCheckFactions.addEventListener("click", renderListFactions);
@@ -46,8 +50,7 @@ function render(){
 		function renderPlayer() {
 			display.appendChild(listAllPlayer);
 			if (display.contains(listAllFactions)){
-				display.removeChild(listAllFactions);
-				display.removeChild(buttonUpdateStatisticsFaction)
+				display.removeChild(divFaction);
 			}
 			listAllPlayer.innerHTML = '';
 			function eventButtonPlayer(elements) {
@@ -105,16 +108,45 @@ function render(){
 			eventButtonPlayer(allPlayer)
 		}
 		function renderListFactions() {
+			display.appendChild(divFaction)
 			if(display.contains(listAllPlayer)){
 				display.removeChild(listAllPlayer)
 			}
-			display.appendChild(listAllFactions);
+			divFaction.appendChild(listAllFactions);
+			divFaction.appendChild(divTirList)
 			allNameFactions.forEach((factionId, index) => {
 				const statisticsFaction = document.createElement("div");
 				const exists = Array.from(listAllFactions.children).some(button => button.id === factionId);
-				buttonUpdateStatisticsFaction.addEventListener("click", updateStatisticsFaction)
+				buttonUpdateStatisticsFaction.addEventListener("click", updateStatisticsFaction);
+				buttonCreateTirList.addEventListener("click", createTirList);
 				function updateStatisticsFaction(){
 					statisticsFaction.innerHTML = `win:${allFactions[index].win} lose:${allFactions[index].lose}`;
+				}
+				function createTirList(){
+					let placeTirList = [["Tir list: "],[],[],[],[],[],[]]
+					allFactions.forEach((element,index)=>{
+						if((element.win == 0)&&(element.lose == 0)){
+							placeTirList[5].push(`<img src = ${element.src} width = ${width/20}px height = ${width/20}px>`)
+						}else if(element.win == 0){
+							placeTirList[4].push(`<img src = ${element.src} width = ${width/20}px height = ${width/20}px>`)
+						}else if(element.lose == 0){
+							placeTirList[1].push(`<img src = ${element.src} width = ${width/20}px height = ${width/20}px>`)
+						}else if(element.win/element.lose >= 0.5){
+							placeTirList[1].push(`<img src = ${element.src} width = ${width/20}px height = ${width/20}px>`)
+						}else if(element.win/element.lose >= 0.25){
+							placeTirList[2].push(`<img src = ${element.src} width = ${width/20}px height = ${width/20}px>`)
+						}else if(element.win/element.lose <= 0.1){
+							placeTirList[3].push(`<img src = ${element.src} width = ${width/20}px height = ${width/20}px>`)
+						}
+					})
+					divTirList.innerHTML = `
+					${placeTirList[0]}<br>
+					S: ${placeTirList[1]}<br>
+					A: ${placeTirList[2]}<br>
+					B: ${placeTirList[3]}<br>
+					C: ${placeTirList[4]}<br>
+					Other factions: ${placeTirList[5]}<br>
+					`
 				}
 				if (!exists) {
 					const a = document.createElement("button");
@@ -129,7 +161,8 @@ function render(){
 					updateStatisticsFaction();
 				}
 			});
-			display.appendChild(buttonUpdateStatisticsFaction);
+			divFaction.appendChild(buttonUpdateStatisticsFaction);
+			divFaction.appendChild(buttonCreateTirList);
 		}
 		function selectionFactions(){
 			allFactions.forEach(allFactions=>{
